@@ -1,4 +1,5 @@
 export interface LoginResponse {
+  success: boolean
   message: string
   user: AuthUser
 }
@@ -7,6 +8,7 @@ export interface AuthUser {
   id: number | string
   email?: string
   role: 'librarian' | 'student'
+  name?: string
 }
 
 export interface LibrarianLoginRequest {

@@ -48,8 +48,9 @@ DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=library_system
 JWT_SECRET=your_long_random_secret
-LIBRARIAN_ID=1
-LIBRARIAN_PASSWORD=123456
+LIBRARIAN_ID=your_librarian_id
+LIBRARIAN_PASSWORD=your_librarian_password
+CLIENT_ORIGIN=http://localhost:5173
 ```
 
 Start the server:
@@ -60,6 +61,9 @@ node index.js
 
 Server URL: `http://localhost:5000`
 
+The default frontend origin is `http://localhost:5173`. Set `CLIENT_ORIGIN` when the
+frontend runs on another origin. Credentialed CORS is enabled for the configured origin.
+
 Health check:
 
 ```http
@@ -68,13 +72,29 @@ GET /health
 
 ## Authentication
 
-Login returns a JWT token. Send it in the request header:
+Login creates a JWT and stores it in an HTTP-only cookie named `token`. The frontend
+must send requests with credentials enabled. The server also accepts a bearer token
+when needed:
 
 ```http
 Authorization: Bearer YOUR_TOKEN
 ```
 
-The server also accepts a cookie named `token`.
+The login response does not expose the JWT. It returns the authenticated user:
+
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "user": {
+    "id": "abc123",
+    "role": "librarian"
+  }
+}
+```
+
+Librarians are configured through environment variables and are not stored in a
+database table. Students are stored in the `students` table.
 
 Available roles:
 
@@ -98,6 +118,35 @@ All protected endpoints require authentication.
 | `GET` | `/api/library-records/my-requests` | Student | View own request statuses |
 | `GET` | `/api/library-records` | Librarian | View book requests |
 | `PATCH` | `/api/library-records/:id` | Librarian | Accept or reject a request |
+
+## Response Format
+
+Successful mutation responses use:
+
+```json
+{
+  "success": true,
+  "message": "Book added successfully"
+}
+```
+
+Successful list responses use:
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+Errors use the same `success` field with `false` and include a message:
+
+```json
+{
+  "success": false,
+  "message": "Invalid credentials"
+}
+```
 
 ## Request Examples
 

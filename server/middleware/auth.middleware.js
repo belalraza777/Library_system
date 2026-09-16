@@ -12,7 +12,7 @@ export function authenticate(req, res, next) {
     const cookieToken = cookies?.token || null;
 
     if (!token && !cookieToken) {
-        return res.status(401).json({ message: 'Authentication required' });
+        return res.status(401).json({ success: false, message: 'Authentication required' });
     }
 
     const finalToken = token || cookieToken;
@@ -20,20 +20,20 @@ export function authenticate(req, res, next) {
     try {
         const user = verifyToken(finalToken);
         if (!user) {
-            return res.status(401).json({ message: 'Invalid or expired token' });
+            return res.status(401).json({ success: false, message: 'Invalid or expired token' });
         }
 
         req.user = user;
         next();
     } catch {
-        res.status(401).json({ message: 'Invalid or expired token' });
+        res.status(401).json({ success: false, message: 'Invalid or expired token' });
     }
 }
 
 export function requireRole(role) {
     return (req, res, next) => {
         if (req.user?.role !== role) {
-            return res.status(403).json({ message: 'Forbidden' });
+            return res.status(403).json({ success: false, message: 'Forbidden' });
         }
         next();
     };

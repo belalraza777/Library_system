@@ -6,6 +6,7 @@ import type {
 	StudentLoginRequest,
 } from '../types/auth'
 
+
 interface AuthContextValue {
 	user: AuthUser | null
 	isAuthenticated: boolean
@@ -14,21 +15,26 @@ interface AuthContextValue {
 	logout: () => void
 }
 
+// Create the AuthContext with an initial value of undefined
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+    //User state to hold the authenticated user information
 	const [user, setUser] = useState<AuthUser | null>(null)
 
+    // Function to handle librarian login
 	const handleLibrarianLogin = async (credentials: LibrarianLoginRequest) => {
 		const response = await loginLibrarian(credentials)
 		setUser(response.user)
 	}
 
+    // Function to handle student login
 	const handleStudentLogin = async (credentials: StudentLoginRequest) => {
 		const response = await loginStudent(credentials)
 		setUser(response.user)
 	}
 
+    // Function to handle logout
 	const logout = () => {
 		setUser(null)
 	}
@@ -48,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	)
 }
 
+// Custom hook to use the AuthContext
 export function useAuth() {
 	const context = useContext(AuthContext)
 

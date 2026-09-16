@@ -45,11 +45,12 @@ database.query('SELECT 1', (err) => {
 
 //Routes
 app.get('/health', (req, res) => {
-	res.json({ status: 'ok', message: 'Library System API is running' });
+    res.json({ success: true, status: 'ok', message: 'Library System API is running' });
 });
 
 app.all('/{*splat}', (req, res) => {
     res.status(404).json({
+        success: false,
         status: 'error',
         message: `Route not found: ${req.method} ${req.originalUrl}`,
     });
