@@ -7,18 +7,18 @@ export async function librarianLogin(req, res) {
         return res.status(400).json({ message: 'ID and password are required' });
     }
 
-    const token = loginLibrarian(id, password);
-    if (!token) {
+    const result = loginLibrarian(id, password);
+    if (!result) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.cookie('token', token, {
+    res.cookie('token', result.token, {
         httpOnly: true,
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ message: 'Login successful', token });
+    res.json({ message: 'Login successful', user: result.user });
 }
 
 //Login for Students
@@ -28,18 +28,18 @@ export async function studentLogin(req, res) {
         return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    const token = await loginUser(email, password, 'students', 'student');
-    if (!token) {
+    const result = await loginUser(email, password, 'students', 'student');
+    if (!result) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.cookie('token', token, {
+    res.cookie('token', result.token, {
         httpOnly: true,
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ message: 'Login successful', token });
+    res.json({ message: 'Login successful', user: result.user });
 }
 
 // Registration for Students

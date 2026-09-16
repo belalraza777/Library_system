@@ -25,7 +25,7 @@ export async function addCategory(name) {
 
 export async function getBooksByCategory(categoryId) {
     const [rows] = await database.promise().query(
-        'SELECT id, book_name, available FROM books WHERE category_id = ? ORDER BY book_name',
+        'SELECT id, category_id, book_name, available FROM books WHERE category_id = ? ORDER BY book_name',
         [categoryId],
     );
     return rows;

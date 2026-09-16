@@ -37,14 +37,16 @@ export async function listMyRequests(req, res) {
 // Update the status of a book request (accessible only by Librarians)
 export async function updateRequest(req, res) {
     const { status, reason } = req.body;
-    if (!['ACCEPTED', 'REJECTED'].includes(status.toUpperCase())) {
+    if (!['ACCEPTED', 'REJECTED'].includes(status?.toUpperCase())) {
         return res.status(400).json({ message: 'Status must be ACCEPTED or REJECTED' });
     }
-    if (status === 'REJECTED' && !reason?.trim()) {
+    const normalizedStatus = status.toUpperCase();
+
+    if (normalizedStatus === 'REJECTED' && !reason?.trim()) {
         return res.status(400).json({ message: 'Reason is required when rejecting a request' });
     }
 
-    const result = await updateBookRequest(req.params.id, status.toUpperCase(), reason?.trim());
+    const result = await updateBookRequest(req.params.id, normalizedStatus, reason?.trim());
     if (result === 'NOT_FOUND') {
         return res.status(404).json({ message: 'Library record not found' });
     }
@@ -55,5 +57,5 @@ export async function updateRequest(req, res) {
         return res.status(409).json({ message: 'Book is currently unavailable' });
     }
 
-    res.json({ message: status === 'ACCEPTED' ? 'Book request accepted' : 'Book request rejected' });
+    res.json({ message: normalizedStatus === 'ACCEPTED' ? 'Book request accepted' : 'Book request rejected' });
 }

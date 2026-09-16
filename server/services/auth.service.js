@@ -12,7 +12,9 @@ export async function loginUser(email, password, table, role) {
         return null;
     }
 
-    return createToken({ id: rows[0].id, email: rows[0].email, role });
+    const user = { id: rows[0].id, email: rows[0].email, role };
+
+    return { token: createToken(user), user };
 }
 
 //Login a librarian and return a JWT token if successful.
@@ -24,10 +26,12 @@ export function loginLibrarian(id, password) {
         return null;
     }
 
-    return createToken({
+    const user = {
         id: process.env.LIBRARIAN_ID,
         role: 'librarian',
-    });
+    };
+
+    return { token: createToken(user), user };
 }
 
 //Register a new student and return true if successful.

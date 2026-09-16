@@ -10,8 +10,21 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
 //Middleware
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', clientOrigin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
+
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
