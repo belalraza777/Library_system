@@ -43,8 +43,11 @@ export async function createBook(req, res) {
     }
 
     const created = await addBook(categoryId, bookName.trim());
-    if (!created) {
+    if (created === 'CATEGORY_NOT_FOUND') {
         return res.status(404).json({ success: false, message: 'Category not found' });
+    }
+    if (created === 'BOOK_EXISTS') {
+        return res.status(409).json({ success: false, message: 'Book already exists' });
     }
 
     res.status(201).json({ success: true, message: 'Book added successfully' });

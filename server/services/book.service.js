@@ -37,12 +37,21 @@ export async function addBook(categoryId, bookName) {
         [categoryId],
     );
     if (!categories.length) {
-        return false;
+        return 'CATEGORY_NOT_FOUND';
+    }
+
+    const [existing] = await database.promise().query(
+        'SELECT id FROM books WHERE book_name = ?',
+        [bookName],
+    );
+    if (existing.length) {
+        return 'BOOK_EXISTS';
     }
 
     await database.promise().query(
         'INSERT INTO books (category_id, book_name) VALUES (?, ?)',
         [categoryId, bookName],
     );
-    return true;
+
+    return 'CREATED';
 }

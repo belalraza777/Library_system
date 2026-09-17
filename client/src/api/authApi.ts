@@ -19,8 +19,8 @@ export const loginLibrarian = async (
 export const loginStudent = async (
   credentials: StudentLoginRequest,
 ): Promise<LoginResponse> => {
-  const { data } = await api.post<LoginResponse>('/auth/student/login', credentials)
-  return data
+  const {data } = await api.post<LoginResponse>('/auth/student/login', credentials)
+  return data;
 }
 
 //Register a new Student

@@ -19,24 +19,39 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    //User state to hold the authenticated user information
-	const [user, setUser] = useState<AuthUser | null>(null)
+	const [user, setUser] = useState<AuthUser | null>(() => {
+		const storedUser = localStorage.getItem('user')
+
+		if (!storedUser) {
+			return null
+		}
+
+		try {
+			return JSON.parse(storedUser) as AuthUser
+		} catch {
+			localStorage.removeItem('user')
+			return null
+		}
+	})
 
     // Function to handle librarian login
 	const handleLibrarianLogin = async (credentials: LibrarianLoginRequest) => {
 		const response = await loginLibrarian(credentials)
 		setUser(response.user)
+		localStorage.setItem('user', JSON.stringify(response.user))
 	}
 
     // Function to handle student login
 	const handleStudentLogin = async (credentials: StudentLoginRequest) => {
 		const response = await loginStudent(credentials)
 		setUser(response.user)
+		localStorage.setItem('user', JSON.stringify(response.user))
 	}
 
     // Function to handle logout
 	const logout = () => {
 		setUser(null)
+		localStorage.removeItem('user')
 	}
 
 	return (

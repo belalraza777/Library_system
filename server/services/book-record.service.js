@@ -44,6 +44,11 @@ export async function createBookRequest(studentId, bookId, fromDate, toDate) {
 			[studentId, bookId, fromDate, toDate],
 		);
 
+		await connection.query(
+			'UPDATE books SET available = FALSE WHERE id = ?',
+			[bookId],
+		);
+
 		await connection.commit();
 		return 'CREATED';
 	} catch (error) {
@@ -66,7 +71,11 @@ export async function getBookRequests() {
 // Fetch only the logged-in student's book requests.
 export async function getStudentBookRequests(studentId) {
 	const [rows] = await database.promise().query(
-        'SELECT * FROM library_records WHERE student_id = ? ORDER BY created_at DESC',
+		`SELECT library_records.*, books.book_name AS book_name
+		 FROM library_records
+		 JOIN books ON library_records.book_id = books.id
+		 WHERE library_records.student_id = ?
+		 ORDER BY library_records.created_at DESC`,
 		[studentId],
 	);
 
@@ -95,22 +104,10 @@ export async function updateBookRequest(recordId, status, reason) {
 			return 'PROCESSED';
 		}
 
-		if (status === 'ACCEPTED') {
-			const [books] = await connection.query(
-				'SELECT available FROM books WHERE id = ? FOR UPDATE',
-				[records[0].book_id],
-			);
-
-			if (!books.length || !books[0].available) {
-				await connection.rollback();
-				return 'UNAVAILABLE';
-			}
-
-			await connection.query(
-				'UPDATE books SET available = FALSE WHERE id = ?',
-				[records[0].book_id],
-			);
-		}
+		await connection.query(
+			'UPDATE books SET available = ? WHERE id = ?',
+			[status === 'REJECTED', records[0].book_id],
+		);
 
 		await connection.query(
 			'UPDATE library_records SET status = ?, reason = ? WHERE id = ?',
