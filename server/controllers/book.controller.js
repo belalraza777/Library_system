@@ -17,7 +17,7 @@ export async function createCategory(req, res) {
         return res.status(400).json({ success: false, message: 'Category name is required' });
     }
 
-    const created = await addCategory(name.trim());
+    const created = await addCategory(name.trim().toUpperCase());
     if (!created) {
         return res.status(409).json({ success: false, message: 'Category already exists' });
     }

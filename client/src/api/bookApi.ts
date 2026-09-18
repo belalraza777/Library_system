@@ -13,8 +13,8 @@ export const getCategories = async (): Promise<Category[]> => {
 export const createCategory = async (
   category: CreateCategoryRequest,
 ): Promise<MessageResponse> => {
-  const { data } = await api.post<ApiResponse<MessageResponse>>('/categories', category)
-  return data.data
+  const { data } = await api.post<MessageResponse>('/categories', category)
+  return data
 }
 
 // Fetch all books for a specific category from the API
