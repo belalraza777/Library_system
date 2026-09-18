@@ -7,7 +7,7 @@ import { getCategories, getBooks } from '../../api/bookApi'
 import { createBookRequest } from '../../api/libraryRecordApi'
 
 
-export default function BookRequest() {
+export default function BookRequestStudent() {
 
   const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState('')
@@ -153,6 +153,7 @@ export default function BookRequest() {
             value={formData.from_date}
             onChange={handleChange}
             required
+            min={new Date().toISOString().split('T')[0]}
           />
         </label>
         {/* To date input field */}
@@ -165,6 +166,7 @@ export default function BookRequest() {
             value={formData.to_date}
             onChange={handleChange}
             required
+            min={formData.from_date || new Date().toISOString().split('T')[0]}
           />
         </label>
 

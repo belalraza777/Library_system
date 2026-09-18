@@ -7,10 +7,10 @@ import LibrarianDashboard from './pages/Librarian/Dashboard'
 import RegisterStudent from './pages/Librarian/RegisterStudent'
 import AddCategory from './pages/Librarian/AddCategory'
 import AddBook from './pages/Librarian/AddBook'
-import LibrarianRequests from './pages/Librarian/Requests'
+import LibrarianRequests from './pages/Librarian/RequestsLibrarian'
 import StudentDashboard from './pages/Student/Dashboard'
 import BookRequest from './pages/Student/BookRequest'
-import MyRequests from './pages/Student/MyRequests'
+import RequestsStudent from './pages/Student/RequestsStudent'
 
 function App() {
   return (
@@ -81,7 +81,7 @@ function App() {
           path="/student/requests"
           element={
             <ProtectedRoute role="student">
-              <MyRequests />
+              <RequestsStudent />
             </ProtectedRoute>
           }
         />

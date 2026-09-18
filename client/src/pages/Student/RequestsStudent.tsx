@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import { getMyRequests } from '../../api/libraryRecordApi'
 import type { LibraryRecord } from '../../types/libraryRecord'
 
-export default function MyRequests() {
+export default function RequestsStudentPage() {
   const [requests, setRequests] = useState<LibraryRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // Load the user's book requests when the component mounts
   useEffect(() => {
     const loadRequests = async () => {
       try {
@@ -25,16 +26,24 @@ export default function MyRequests() {
     void loadRequests()
   }, [])
 
-  const formatDate = (date: string) => new Date(date).toLocaleDateString()
+  // Format date to a more readable format
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
 
-  console.log('Requests:', requests) // Debugging line to check the requests data
+
   return (
     <main className="container">
       <h1>My requests</h1>
+      {/* Display error message if any */}
       {error && <p className="error" role="alert">{error}</p>}
       {loading && <p>Loading requests...</p>}
       {!loading && !error && requests.length === 0 && <p>You have not requested any books yet.</p>}
       {!loading && !error && requests.length > 0 && (
+        // {/* Display the user's requests in a table */}
         <table>
           <thead>
             <tr>

@@ -62,7 +62,12 @@ export async function createBookRequest(studentId, bookId, fromDate, toDate) {
 // Fetch all book requests [accessible only by Librarians]
 export async function getBookRequests() {
 	const [rows] = await database.promise().query(
-        'SELECT * FROM library_records ORDER BY created_at DESC',
+		`SELECT library_records.*, books.book_name AS book_name,
+				students.name AS student_name
+		 FROM library_records
+		 JOIN books ON library_records.book_id = books.id
+		 JOIN students ON library_records.student_id = students.id
+		 ORDER BY library_records.created_at DESC`,
 	);
 
 	return rows;

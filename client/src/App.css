@@ -172,6 +172,25 @@
 	border-bottom: none;
 }
 
+.request-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 280px;
+}
+
+.request-actions input {
+	min-width: 150px;
+	margin: 0;
+	padding: 8px;
+}
+
+.request-actions button {
+	margin: 0;
+	padding: 8px 10px;
+	white-space: nowrap;
+}
+
 @media (max-width: 600px) {
 	.librarian-navigation,
 	.student-navigation {
