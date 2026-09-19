@@ -23,6 +23,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+//Routes
+app.get('/', (req, res) => {
+    res.json({ success: true, message: 'Welcome to the Library System API' });
+});
 app.use('/api', authRoutes);
 app.use('/api', bookRoutes);
 app.use('/api/library-records', libraryRecordRoutes);
