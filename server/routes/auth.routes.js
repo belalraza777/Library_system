@@ -2,6 +2,7 @@ import express from 'express';
 import { authenticate, requireRole } from '../middleware/auth.middleware.js';
 import {
 	librarianLogin,
+	logout,
 	studentLogin,
 	studentRegistration,
 } from '../controllers/auth.controller.js';
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post('/auth/librarian/login', librarianLogin);
 // Login route for Students
 router.post('/auth/student/login', studentLogin);
+router.post('/auth/logout', logout);
 // Registration route for Students (accessible only by Librarians)
 router.post('/students', authenticate, requireRole('librarian'), studentRegistration);
 

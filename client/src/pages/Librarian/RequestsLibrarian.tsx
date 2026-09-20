@@ -93,7 +93,11 @@ export default function RequestsLibrarianPage() {
                   <td>{request.book_name ?? 'Some Error'}</td>
                   <td>{formatDate(request.from_date)}</td>
                   <td>{formatDate(request.to_date)}</td>
-                  <td>{request.status}</td>
+                  <td>
+                    <span className={`request-status request-status-${request.status.toLowerCase()}`}>
+                      {request.status}
+                    </span>
+                  </td>
                   <td>
                     {request.status === 'PENDING' ? (
                       <>
@@ -105,7 +109,7 @@ export default function RequestsLibrarianPage() {
                         </button>
                       </>
                     ) : (
-                      request.reason ?? '-'
+                      <span className="request-reason">{request.reason ?? '-'}</span>
                     )}
                   </td>
                 </tr>

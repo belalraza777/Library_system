@@ -23,6 +23,11 @@ export const loginStudent = async (
   return data;
 }
 
+export const logoutUser = async (): Promise<MessageResponse> => {
+  const { data } = await api.post<MessageResponse>('/auth/logout')
+  return data
+}
+
 //Register a new Student
 export const registerStudent = async (
   student: StudentRegistrationRequest,

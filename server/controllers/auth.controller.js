@@ -57,3 +57,13 @@ export async function studentRegistration(req, res) {
     res.status(201).json({ success: true, message: 'Student registered successfully' });
 }
 
+export function logout(req, res) {
+    res.clearCookie('token', {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+    });
+    res.status(200).json({ success: true, message: 'Logout successful' });
+}
+

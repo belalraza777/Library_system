@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import { loginLibrarian, loginStudent } from '../api/authApi'
+import { loginLibrarian, loginStudent, logoutUser } from '../api/authApi'
 import type {
   AuthUser,
 	LibrarianLoginRequest,
@@ -12,7 +12,7 @@ interface AuthContextValue {
 	isAuthenticated: boolean
 	loginLibrarian: (credentials: LibrarianLoginRequest) => Promise<void>
 	loginStudent: (credentials: StudentLoginRequest) => Promise<void>
-	logout: () => void
+	logout: () => Promise<void>
 }
 
 // Create the AuthContext with an initial value of undefined
@@ -49,7 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	}
 
     // Function to handle logout
-	const logout = () => {
+	const logout = async () => {
+		await logoutUser()
 		setUser(null)
 		localStorage.removeItem('user')
 	}

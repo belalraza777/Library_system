@@ -60,8 +60,14 @@ export default function RequestsStudentPage() {
                 <td>{request.book_name ?? 'Unknown book'}</td>
                 <td>{formatDate(request.from_date)}</td>
                 <td>{formatDate(request.to_date)}</td>
-                <td>{request.status}</td>
-                <td>{request.reason ?? '-'}</td>
+                <td>
+                  <span className={`request-status request-status-${request.status.toLowerCase()}`}>
+                    {request.status}
+                  </span>
+                </td>
+                <td>
+                  <p className="request-reason">{request.reason ?? '-'} </p>
+                </td>
               </tr>
             ))}
           </tbody>
